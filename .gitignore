@@ -1,21 +1,30 @@
-# Build / IDE
+# Build artifacts
 build/
-.cache/
 *.o
-*.so
 *.a
+*.so
+*.dylib
+
+# IDE
 .vscode/
 .idea/
 *.swp
+*.swo
 *~
 
-# Python
-__pycache__/
-*.py[cod]
-.pytest_cache/
-*.egg-info/
-.eggs/
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
 
-# Local / env
-.env
-*.local
+# Test artifacts
+Testing/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Third party (managed by submodule)
+third_party/simpler/
