@@ -29,7 +29,9 @@ set(PYPTO_SOURCES
     src/engine/sequence.cpp
     src/engine/scheduler.cpp
     src/engine/model_runner_mock.cpp
+    src/engine/model_runner_llama.cpp
     src/engine/model_runner_pto2.cpp
+    src/engine/model_runner_llama_pto2.cpp
     src/engine/engine.cpp
     src/radix/block_manager.cpp
     src/radix/kv_pool_mock.cpp
@@ -37,12 +39,19 @@ set(PYPTO_SOURCES
     src/frontend/test_path.cpp
     src/pto2/pto2_config.cpp
     src/pto2/pto2_runtime.cpp
+    src/llama_pto2/tensor_pto2.cpp
+    src/llama_pto2/layers_pto2.cpp
+    src/llama_pto2/attention_pto2.cpp
+    src/llama_pto2/mlp_pto2.cpp
+    src/llama_pto2/transformer_pto2.cpp
+    src/llama_pto2/pto2_runtime_stub.cpp
 )
 
 # Core library
 add_library(pypto_core STATIC ${PYPTO_SOURCES})
 target_include_directories(pypto_core PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/pypto_workspace/simpler/src/runtime/tensormap_and_ringbuffer
 )
 target_link_libraries(pypto_core PUBLIC Threads::Threads)
 
@@ -111,6 +120,36 @@ if(BUILD_EXAMPLES)
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples/simulator_demo/simulator_demo.cpp)
         add_executable(simulator_demo examples/simulator_demo/simulator_demo.cpp)
         target_link_libraries(simulator_demo PRIVATE pypto_core)
+    endif()
+    
+    # LLaMA demo example
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples/llama_demo/llama_demo.cpp)
+        add_executable(llama_demo examples/llama_demo/llama_demo.cpp)
+        target_link_libraries(llama_demo PRIVATE pypto_core)
+    endif()
+    
+    # LLaMA test example
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples/llama_test/llama_test.cpp)
+        add_executable(llama_test examples/llama_test/llama_test.cpp)
+        target_link_libraries(llama_test PRIVATE pypto_core)
+    endif()
+    
+    # TinyLlama test example
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples/tinyllama_test/tinyllama_test.cpp)
+        add_executable(tinyllama_test examples/tinyllama_test/tinyllama_test.cpp)
+        target_link_libraries(tinyllama_test PRIVATE pypto_core)
+    endif()
+    
+    # Config verification example
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples/config_verification/verify_config.cpp)
+        add_executable(verify_config examples/config_verification/verify_config.cpp)
+        target_link_libraries(verify_config PRIVATE pypto_core)
+    endif()
+    
+    # LLaMA PTO2 demo example
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples/llama_pto2_demo/llama_pto2_demo.cpp)
+        add_executable(llama_pto2_demo examples/llama_pto2_demo/llama_pto2_demo.cpp)
+        target_link_libraries(llama_pto2_demo PRIVATE pypto_core)
     endif()
 endif()
 
